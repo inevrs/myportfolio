@@ -95,6 +95,9 @@ export default function Home() {
       {/* SOUNDTRACK PLAYER */}
       <SoundtrackPlayer />
 
+      {/* NAV */}
+      <Navbar />
+
       {/* HERO */}
       <section id="hero">
         <div className="hero-inner">

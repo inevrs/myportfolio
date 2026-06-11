@@ -116,7 +116,7 @@ export default function Home() {
           <div className="hero-name chrome-text cursor-blink">Welcome
           </div>
           <div className="hero-sub">// portfolio . projects . contact</div>
-          <div className="hero-tagline">
+          <div className="hero-tagline contact-card">
             [Mostly self-taught developer who enjoys creating projects, solving problems, and learning new technologies.]<br />
           </div>
           <div className="scroll-hint">▼ scroll ▼</div>

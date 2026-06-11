@@ -303,6 +303,44 @@ export default function AsciiBackground() {
       }
     }
 
+    const handleTouch = (e: TouchEvent) => {
+      const touch = e.touches[0]
+      if (!touch) return
+      const rect = canvas.getBoundingClientRect()
+      const scaleX = canvas.width  / rect.width
+      const scaleY = canvas.height / rect.height
+      const px = (touch.clientX - rect.left) * scaleX
+      const py = (touch.clientY - rect.top)  * scaleY
+      const col = Math.floor(px / cellW)
+      const row = Math.floor(py / cellH)
+      if (col >= 0 && col < NUM_COLS && row >= 0 && row < NUM_ROWS) {
+        addRipple(col, row, { strength: 0.5, speed: 0.7, decay: 0.96, wavelength: 3 })
+        if (!isRunningLoop) runRippleLoop()
+      }
+    }
+
+    const handleTouchTap = (e: TouchEvent) => {
+      const touch = e.changedTouches[0]
+      if (!touch) return
+      const rect = canvas.getBoundingClientRect()
+      const scaleX = canvas.width  / rect.width
+      const scaleY = canvas.height / rect.height
+      const px = (touch.clientX - rect.left) * scaleX
+      const py = (touch.clientY - rect.top)  * scaleY
+      const col = Math.floor(px / cellW)
+      const row = Math.floor(py / cellH)
+      if (col >= 0 && col < NUM_COLS && row >= 0 && row < NUM_ROWS) {
+        addRipple(col, row, { strength: 1.0, speed: 1.2, decay: 0.90, wavelength: 6 })
+        if (!isRunningLoop) runRippleLoop()
+      }
+    }
+
+    window.addEventListener('touchmove', handleTouch, { passive: true })
+    window.addEventListener('touchstart', handleTouchTap, { passive: true })
+
+    window.removeEventListener('touchmove', handleTouch)
+    window.removeEventListener('touchstart', handleTouchTap)
+
     const handleResize = () => {
       computeSize()
       buildAndFlush()

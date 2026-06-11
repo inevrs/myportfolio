@@ -31,7 +31,7 @@ export default function Navbar() {
   }, [])
 
   const getLinkStyle = (id: string) => ({
-    color: activeSection === id ? '#f0f3f8' : '#555555',
+    color: activeSection === id ? '#f0f3f8' : '#aaaaaa',
     textShadow: activeSection === id ? '0 0 8px rgba(240,243,248,0.6)' : 'none',
   })
 

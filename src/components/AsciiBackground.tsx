@@ -6,20 +6,20 @@ const ASCII_ART = `   ,ooo                                                      
    ;//!                                                                                       ....                                                                                                           .....          
  .  Co+ .                                                                                    .....                                                                                                           .....          
  ::;;;,;:,                                                                                 ... ...                                                                                                           .....          
-                                                                                          ........                                                                                                           .....          
+                                                                                            ........                                                                                                           .....          
                                                                                          .. ......                                                                                                           .....          
                                                                                        ...  .....                                                                                                            ......         
                                                                                       ... .......                                                                                                            ......         
                                                                                      ... .......                                                                                                            ...  ...        
-                                                                                   .... .......                                                                                                            ... .. ...       
+                                                                                   .... .......                                                                                                            ... .. ...      
                                                                                   .... ........                                                                                                            ....... ...      
                                                                                 ....  ..,.....                                                                                                            ... .,,.. ...     
                                                                               ....  ..,,,.....                                                                                                           ... ....,.. ...    
-                                     ....                                  .....  ...,,,......                                                                                                        ......,,,...... ....  
+                                   ....                                  .....  ...,,,......                                                                                                        ......,,,...... ....  
                                    ........                             .....   ...,,,,,,.....                                                                                                      ...............,,,......
                                 ....       ......                   .....    ....,,,,,,,,.....                                                                                               . ..........       ............
                               ...   .......   .. ....         ........   .....,,,,,,,,,,,.....                                                                                           ..   ........                   . .
-                            .... . ..,,,,,....      ............  ...  ....,,,,,,,;;;,,,,......                                                         ...                        ................ .                       
+                            .... . .,,,,,....      ............  ...  ....,,,,,,,;;;,,,,......                                                         ...                        ................ .                       
                            ...  ..,,,,,,,.,,,,,,.                  ..,,,,,,,,,;;;::::,,,,... ..                                                         .............................    ...,....                           
                           ... ...,,,,,;;;;;,,,,.,,,,,,,,,,,,,,,,,,,,,,,,,,;;;;:::::::;,,,,... ..                                                       ...        ........           .....,...                              
                          .......,,,,;;:;:;:;;;;;,,,,,,,,,,,,,,,,,,,,;;;;;;;:;::::,,::;;,,,,... ..                                                     ... ...,,...        ..,,,,,,.........                                 
@@ -31,9 +31,9 @@ const ASCII_ART = `   ,ooo                                                      
                              ......,,,,,;;:;,::;; ::::::::::::::::::;;,,;,:+c+;::+  ,;:+;;+;;;,,,,,....   ....                            ....   ....,,,,,;;::;;;;:;;,,,,.....                                              
                                ......,,,,;;:;;+:;; ::;,;,,,,,,,,:++++c+++++++++;;::+ ,:;:;;;+;;;,,,,,,....   ...                      ....    ....,,,,,,;;::;,;,;;:;,,,......                                               
                                 ......,,,,,;:;;:;;, ::;;++++++++++++++++++++c:;,,::::. ,:;:;;;+;;;,,,,,,,... .  ........       .........  . ...,,,,,,,;;::;;;:;;:;;,,,,.....                                                
-                                 ......,,,,,;:,;:;;,.::;;++++++++++++++cc:;,;:::::   .,::;:;;;;;:;;;;,,.,,,,,.       ..............      ..,,,,,,,,;;::;;;;;:::;:;;,,,,.....                                                
+                                 ......,,,,,;::;::;;,.::;;++++++++++++++cc:;,;:::::   .,::;:;;;;;:;;;;,,.,,,,,.       ..............      ..,,,,,,,,;;::;;;;;:::;:;;,,,,.....                                                
                                   ......,,,,,;:;;:;,,.;;,;+++++++++++c:;;:;:::  ;;;;;::;;;;;:;;;:::::;;;,,,.,,,,,,..               ..,,,,,,,,,,;;;;::;::;;:::;:::;,,,......                                                 
-                                   ......,,,,;::,:;;; ::;,+++++++c+c:;;;:+;..;,;;;;;;:::;,;,;::;;,;,;,;,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,;;;;::;;::;,:+::;:;:;:;,,,.....                                                  
+                                   ......,,,,;::,;;;; ::;,+++++++c+c:;;;:+;..;,;;;;;;:::;,;,;::;;,;,;,;,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,;;;;::;;::;,:+::;:;:;:;,,,.....                                                  
                                     ......,,,,;;,,:;;.,:;,;++++++:::;;::.,;,,;;:;::;;,;;:;;;;,;,;,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,;;;;:;:;:::,,::::;;;:;,:;;,,,,.....                                                  
                                      .....,,,,;:;;:;;; ;;;,++++::;,;:;,;.,;;:+:,,,;:;;;,;,,,,,,.................,,,,,,,,,,,,;;;;,,,;;;;;;;;;;;;;;;:::;,,,::::;:;;,,,,.....                                                  
                                      ......,,,;;;,,:;; ;::;++::;,::;,;.:;:++,,;:;;;;,,,,.........,.,.,,,,,.,,,,.......,,,,,,;;;;;,,,,,,,,,,,,,,,,,,;;;;;;;:,,;:;;,,,,.....                                                  
@@ -44,7 +44,7 @@ const ASCII_ART = `   ,ooo                                                      
                                       .....,,,;;;;,;;; ;::;+. .:;+;;;:;;,,,,......                                                                      .........,,,,,,......                                               
                                       .....,,,;;;;;:;; ;:;+, .::;:;:;;,,,,,.....                                                                            .......,,,,,......                                              
                                       .....,,,;:;;::;. :;+. .:;:;;;::,,,....,.                                                                               ........,,,,.  ...                                             
-                                      ....,,,,;:;;:;;  ;+,.,;:;:,:;;;,,,.....                                                                                   ..,....,,,.. ....                                           
+                                      ....,,,,;:;;:;;  ;+,.,;:;:,:;;;,,,.....                                                                                  _.._..._,,._.___..._..                                           
                                       .....,,,;:;;:;;  :,.;:;:;;;:;,,,,......                                                                                    . .....,,,..  ...                                          
                                       ....,,,,;:;;:;;  , ;:;::,;:;,,,,......                                                                                       ......,,,,.. .....                                       
                                       ....,,,,;:;;:;,.. ::;:;;::;;,,,......                                                                                         ............   .....                                    
@@ -73,7 +73,6 @@ const ART_ROWS = ASCII_ART.split('\n')
 const NUM_ROWS = ART_ROWS.length
 const NUM_COLS = Math.max(...ART_ROWS.map(r => r.length))
 
-// Pre-build the original grid once at module level
 const ORIGINAL_GRID: string[][] = ART_ROWS.map(r => r.padEnd(NUM_COLS, ' ').split(''))
 
 export default function AsciiBackground() {
@@ -85,11 +84,9 @@ export default function AsciiBackground() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-    // Capture as non-null for use inside nested functions
     const context = ctx
     const cvs = canvas
 
-    // --- State ---
     let cellW = 0
     let cellH = 0
     let fontSize = 0
@@ -99,9 +96,7 @@ export default function AsciiBackground() {
 
     const shimmerOffsets = new Int8Array(NUM_ROWS * NUM_COLS)
     const sparkleOffsets = new Uint8Array(NUM_ROWS * NUM_COLS)
-    // display grid — what's currently shown; used for dirty checking
     const displayGrid: string[][] = ORIGINAL_GRID.map(r => [...r])
-    // prev grid — what was drawn last frame
     const prevGrid: string[][] = ORIGINAL_GRID.map(r => [...r])
     let ripples: Ripple[] = []
 
@@ -111,19 +106,27 @@ export default function AsciiBackground() {
       context.font = `${testSize}px 'Share Tech Mono', monospace`
       const metrics = context.measureText('M')
       const charW = metrics.width
-      // Use actual measured height: ascent + descent
       const charH = testSize * 1.2
 
       const scaleX = window.innerWidth  / (NUM_COLS * charW  / testSize)
       const scaleY = window.innerHeight / (NUM_ROWS * charH  / testSize)
-      fontSize = Math.min(scaleX, scaleY)
+      
+      // MODIFICATION: On mobile/portrait screens, use Math.max to zoom/crop 
+      // instead of Math.min (which shrinks everything down).
+      // We also enforce a floor of 11px so it doesn't become tiny text dust.
+      if (window.innerWidth < 768) {
+        fontSize = Math.max(scaleX, scaleY, 11)
+      } else {
+        fontSize = Math.min(scaleX, scaleY)
+      }
+
       cellW = fontSize * (charW / testSize)
       cellH = fontSize * 1.2
 
+      // Set the canvas rendering resolution dynamically based on calculated cell size
       cvs.width  = Math.ceil(NUM_COLS * cellW)
       cvs.height = Math.ceil(NUM_ROWS * cellH)
 
-      // After resize, force full redraw
       for (let r = 0; r < NUM_ROWS; r++)
         for (let c = 0; c < NUM_COLS; c++)
           prevGrid[r][c] = ''
@@ -137,18 +140,16 @@ export default function AsciiBackground() {
       for (let r = 0; r < NUM_ROWS; r++) {
         for (let c = 0; c < NUM_COLS; c++) {
           const ch = displayGrid[r][c]
-          if (ch === prevGrid[r][c]) continue   // skip unchanged
+          if (ch === prevGrid[r][c]) continue
           prevGrid[r][c] = ch
 
           const x = c * cellW
           const y = r * cellH
 
-          // Erase old cell
           context.clearRect(x, y, cellW + 1, cellH + 1)
 
           if (ch === ' ') continue
 
-          // Moonlight glow layers
           context.fillStyle = 'rgba(150,190,255,0.15)'
           context.fillText(ch, x, y)
           context.fillStyle = 'rgba(180,210,255,0.35)'
@@ -159,7 +160,6 @@ export default function AsciiBackground() {
       }
     }
 
-    // --- Build display from state, then flush dirty ---
     function buildAndFlush() {
       for (let r = 0; r < NUM_ROWS; r++) {
         for (let c = 0; c < NUM_COLS; c++) {
@@ -192,7 +192,6 @@ export default function AsciiBackground() {
       flushDirty()
     }
 
-    // --- Ripple loop ---
     function runRippleLoop() {
       if (ripples.length === 0) {
         isRunningLoop = false
@@ -201,7 +200,6 @@ export default function AsciiBackground() {
       }
       isRunningLoop = true
 
-      // Reset display to base + shimmer first
       for (let r = 0; r < NUM_ROWS; r++) {
         for (let c = 0; c < NUM_COLS; c++) {
           const idx = r * NUM_COLS + c
@@ -224,7 +222,6 @@ export default function AsciiBackground() {
         }
       }
 
-      // Apply ripples
       ripples = ripples.filter(ripple => {
         ripple.radius += ripple.speed
         ripple.strength *= ripple.decay
@@ -338,15 +335,11 @@ export default function AsciiBackground() {
     window.addEventListener('touchmove', handleTouch, { passive: true })
     window.addEventListener('touchstart', handleTouchTap, { passive: true })
 
-    window.removeEventListener('touchmove', handleTouch)
-    window.removeEventListener('touchstart', handleTouchTap)
-
     const handleResize = () => {
       computeSize()
       buildAndFlush()
     }
 
-    // --- Shimmer / sparkle intervals ---
     const shimmerInterval = setInterval(() => {
       for (let i = 0; i < sparkleOffsets.length; i++)
         if (sparkleOffsets[i] > 0) sparkleOffsets[i]--
@@ -379,7 +372,6 @@ export default function AsciiBackground() {
       if (!isRunningLoop) buildAndFlush()
     }, 5000)
 
-    // --- Init ---
     computeSize()
     document.fonts.ready.then(() => {
       computeSize()
@@ -395,6 +387,8 @@ export default function AsciiBackground() {
       window.removeEventListener('mousemove', throttledMouseMove)
       window.removeEventListener('click', handleClick)
       window.removeEventListener('resize', handleResize)
+      window.removeEventListener('touchmove', handleTouch)
+      window.removeEventListener('touchstart', handleTouchTap)
       clearInterval(shimmerInterval)
       clearInterval(resetInterval)
       cancelAnimationFrame(animFrameId)
@@ -402,10 +396,12 @@ export default function AsciiBackground() {
   }, [])
 
   return (
+    /* MODIFICATION: Applied "max-w-none" and fixed absolute sizing styles 
+       to handle overflow cleanly while retaining the viewport centering */
     <div id="ascii-bg" className="fixed inset-0 z-0 pointer-events-none overflow-hidden flex items-center justify-center">
       <canvas
         ref={canvasRef}
-        style={{ imageRendering: 'pixelated', pointerEvents: 'auto' }}
+        style={{ imageRendering: 'pixelated', pointerEvents: 'auto', maxWidth: 'none', maxHeight: 'none' }}
       />
     </div>
   )

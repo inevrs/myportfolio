@@ -204,27 +204,29 @@ export default function Home() {
         <div className="contact-inner">
           <p>Open to opportunities, collabs, or just a conversation. Reach out {'><'}.</p>
           <div className="contact-links">
-            <div className="contact-row">
-              <span className="contact-key">email</span>
-              <a href="mailto:isyrafnasruddin9@email.com" className="contact-val">
-                isyrafnasruddin9@email.com
-              </a>
-            </div>
-            <div className="contact-row">
-              <span className="contact-key">github</span>
-              <a href="https://github.com/inevrs" target="_blank" rel="noopener noreferrer" className="contact-val">
-                github.com/inevrs
-              </a>
-            </div>
-            <div className="contact-row">
-              <span className="contact-key">discord</span>
-              <a href="#" className="contact-val">@invertedivine</a>
-            </div>
-            <div className="contact-row">
-              <span className="contact-key">instagram</span>
-              <a href="https://instagram.com/isyvrns" target="_blank" rel="noopener noreferrer" className="contact-val">
-                @isyvrns
-              </a>
+            <div className="contact-card">
+              <div className="contact-row">
+                <span className="contact-key">email</span>
+                <a href="mailto:isyrafnasruddin9@email.com" className="contact-val">
+                  isyrafnasruddin9@email.com
+                </a>
+              </div>
+              <div className="contact-row">
+                <span className="contact-key">github</span>
+                <a href="https://github.com/inevrs" target="_blank" rel="noopener noreferrer" className="contact-val">
+                  github.com/inevrs
+                </a>
+              </div>
+              <div className="contact-row">
+                <span className="contact-key">discord</span>
+                <a href="#" className="contact-val">@invertedivine</a>
+              </div>
+              <div className="contact-row">
+                <span className="contact-key">instagram</span>
+                <a href="https://instagram.com/isyvrns" target="_blank" rel="noopener noreferrer" className="contact-val">
+                  @isyvrns
+                </a>
+              </div>
             </div>
           </div>
         </div>

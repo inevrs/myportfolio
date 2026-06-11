@@ -83,7 +83,7 @@ export default function Home() {
 
   const getNavLinkStyle = (id: string) => {
     return activeSection === id
-      ? { color: '#f0f3f8', textShadow: '0 0 8px rgba(240, 243, 248, 0.6)' }
+      ? { color: '#f0f3f8', textShadow: '0 0 8px rgba(240, 243, 248, 0.78)' }
       : {}
   }
 
@@ -95,7 +95,7 @@ export default function Home() {
       {/* SOUNDTRACK PLAYER */}
       <SoundtrackPlayer />
 
-      {/* NAV */}
+      {/* NAVBAR */}
       <Navbar />
 
       {/* HERO */}

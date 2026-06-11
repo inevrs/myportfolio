@@ -68,70 +68,159 @@ interface Ripple {
   wavelength: number
 }
 
+const SHIMMER_CHARS = ' .,;:+cCoxwkI?HO!/'
+const ART_ROWS = ASCII_ART.split('\n')
+const NUM_ROWS = ART_ROWS.length
+const NUM_COLS = Math.max(...ART_ROWS.map(r => r.length))
+
+// Pre-build the original grid once at module level
+const ORIGINAL_GRID: string[][] = ART_ROWS.map(r => r.padEnd(NUM_COLS, ' ').split(''))
+
 export default function AsciiBackground() {
-  const preRef = useRef<HTMLPreElement>(null)
+  const canvasRef = useRef<HTMLCanvasElement>(null)
 
   useEffect(() => {
-    const pre = preRef.current
-    if (!pre) return
+    const canvas = canvasRef.current
+    if (!canvas) return
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
 
-    const rows = ASCII_ART.split('\n')
-    const numRows = rows.length
-    const numCols = Math.max(...rows.map(r => r.length))
-    const shimmerChars = ' .,;:+cCoxwkI?HO!/'
-
-    const originalGrid: string[][] = rows.map(r => r.padEnd(numCols, ' ').split(''))
-    const shimmerOffsets: number[] = new Array(numRows * numCols).fill(0)
-    const sparkleOffsets: number[] = new Array(numRows * numCols).fill(0)
-
-    let ripples: Ripple[] = []
+    // --- State ---
+    let cellW = 0
+    let cellH = 0
+    let fontSize = 0
+    let animFrameId = 0
     let isRunningLoop = false
-    let animFrameId: number
+    let lastMove = 0
 
-    function addRipple(x: number, y: number, opts: Partial<Ripple> = {}) {
-      ripples.push({
-        x, y,
-        radius: 0,
-        strength: opts.strength ?? 0.6,
-        speed: opts.speed ?? 0.8,
-        decay: opts.decay ?? 0.94,
-        wavelength: opts.wavelength ?? 4,
-      })
+    const shimmerOffsets = new Int8Array(NUM_ROWS * NUM_COLS)
+    const sparkleOffsets = new Uint8Array(NUM_ROWS * NUM_COLS)
+    // display grid — what's currently shown; used for dirty checking
+    const displayGrid: string[][] = ORIGINAL_GRID.map(r => [...r])
+    // prev grid — what was drawn last frame
+    const prevGrid: string[][] = ORIGINAL_GRID.map(r => [...r])
+    let ripples: Ripple[] = []
+
+    // --- Sizing ---
+    function computeSize() {
+      const testSize = 16
+      ctx.font = `${testSize}px 'Share Tech Mono', monospace`
+      const metrics = ctx.measureText('M')
+      const charW = metrics.width
+      // Use actual measured height: ascent + descent
+      const charH = testSize * 1.2
+
+      const scaleX = window.innerWidth  / (NUM_COLS * charW  / testSize)
+      const scaleY = window.innerHeight / (NUM_ROWS * charH  / testSize)
+      fontSize = Math.min(scaleX, scaleY)
+      cellW = fontSize * (charW / testSize)
+      cellH = fontSize * 1.2
+
+      canvas.width  = Math.ceil(NUM_COLS * cellW)
+      canvas.height = Math.ceil(NUM_ROWS * cellH)
+
+      // After resize, force full redraw
+      for (let r = 0; r < NUM_ROWS; r++)
+        for (let c = 0; c < NUM_COLS; c++)
+          prevGrid[r][c] = ''
     }
 
-    function renderStaticWithShimmer() {
-      const displayGrid: string[][] = originalGrid.map(r => [...r])
-      for (let r = 0; r < numRows; r++) {
-        for (let c = 0; c < numCols; c++) {
-          const idx = r * numCols + c
-          const orig = originalGrid[r][c]
+    // --- Draw only changed cells ---
+    function flushDirty() {
+      ctx.font = `${fontSize}px 'Share Tech Mono', monospace`
+      ctx.textBaseline = 'top'
+
+      for (let r = 0; r < NUM_ROWS; r++) {
+        for (let c = 0; c < NUM_COLS; c++) {
+          const ch = displayGrid[r][c]
+          if (ch === prevGrid[r][c]) continue   // skip unchanged
+          prevGrid[r][c] = ch
+
+          const x = c * cellW
+          const y = r * cellH
+
+          // Erase old cell
+          ctx.clearRect(x, y, cellW + 1, cellH + 1)
+
+          if (ch === ' ') continue
+
+          // Moonlight glow layers
+          ctx.fillStyle = 'rgba(150,190,255,0.15)'
+          ctx.fillText(ch, x, y)
+          ctx.fillStyle = 'rgba(180,210,255,0.35)'
+          ctx.fillText(ch, x, y)
+          ctx.fillStyle = 'rgba(232,240,255,0.70)'
+          ctx.fillText(ch, x, y)
+        }
+      }
+    }
+
+    // --- Build display from state, then flush dirty ---
+    function buildAndFlush() {
+      for (let r = 0; r < NUM_ROWS; r++) {
+        for (let c = 0; c < NUM_COLS; c++) {
+          const idx = r * NUM_COLS + c
+          const orig = ORIGINAL_GRID[r][c]
+
           if (sparkleOffsets[idx] > 0) {
             displayGrid[r][c] = sparkleOffsets[idx] > 2 ? 'O' : (orig === ' ' ? '.' : orig.toUpperCase())
             continue
           }
-          if (orig === ' ') continue
+
+          if (orig === ' ') {
+            displayGrid[r][c] = ' '
+            continue
+          }
+
           const offset = shimmerOffsets[idx]
           if (offset !== 0) {
-            const i = shimmerChars.indexOf(orig)
+            const i = SHIMMER_CHARS.indexOf(orig)
             if (i !== -1) {
-              const ni = Math.max(0, Math.min(shimmerChars.length - 1, i + offset))
-              displayGrid[r][c] = shimmerChars[ni]
+              const ni = Math.max(0, Math.min(SHIMMER_CHARS.length - 1, i + offset))
+              displayGrid[r][c] = SHIMMER_CHARS[ni]
+              continue
+            }
+          }
+
+          displayGrid[r][c] = orig
+        }
+      }
+      flushDirty()
+    }
+
+    // --- Ripple loop ---
+    function runRippleLoop() {
+      if (ripples.length === 0) {
+        isRunningLoop = false
+        buildAndFlush()
+        return
+      }
+      isRunningLoop = true
+
+      // Reset display to base + shimmer first
+      for (let r = 0; r < NUM_ROWS; r++) {
+        for (let c = 0; c < NUM_COLS; c++) {
+          const idx = r * NUM_COLS + c
+          const orig = ORIGINAL_GRID[r][c]
+          if (sparkleOffsets[idx] > 0) {
+            displayGrid[r][c] = sparkleOffsets[idx] > 2 ? 'O' : (orig === ' ' ? '.' : orig.toUpperCase())
+          } else if (orig === ' ') {
+            displayGrid[r][c] = ' '
+          } else {
+            const offset = shimmerOffsets[idx]
+            if (offset !== 0) {
+              const i = SHIMMER_CHARS.indexOf(orig)
+              displayGrid[r][c] = i !== -1
+                ? SHIMMER_CHARS[Math.max(0, Math.min(SHIMMER_CHARS.length - 1, i + offset))]
+                : orig
+            } else {
+              displayGrid[r][c] = orig
             }
           }
         }
       }
-      pre.textContent = displayGrid.map(r => r.join('')).join('\n')
-    }
 
-    function runRippleLoop() {
-      if (ripples.length === 0) {
-        isRunningLoop = false
-        renderStaticWithShimmer()
-        return
-      }
-      isRunningLoop = true
-      const displayGrid: string[][] = originalGrid.map(r => [...r])
-
+      // Apply ripples
       ripples = ripples.filter(ripple => {
         ripple.radius += ripple.speed
         ripple.strength *= ripple.decay
@@ -139,114 +228,131 @@ export default function AsciiBackground() {
       })
 
       for (const ripple of ripples) {
-        for (let r = 0; r < numRows; r++) {
-          for (let c = 0; c < numCols; c++) {
+        for (let r = 0; r < NUM_ROWS; r++) {
+          for (let c = 0; c < NUM_COLS; c++) {
             const dr = (r - ripple.y) * 2.1
             const dc = c - ripple.x
             const dist = Math.sqrt(dr * dr + dc * dc)
             const wave = Math.sin((dist - ripple.radius) * (Math.PI / ripple.wavelength))
             const envelope = ripple.strength * Math.exp(-Math.abs(dist - ripple.radius) * 0.4)
             const effect = wave * envelope
-
             if (Math.abs(effect) < 0.05) continue
 
-            const orig = originalGrid[r][c]
-            const idx = r * numCols + c
+            const idx = r * NUM_COLS + c
             if (sparkleOffsets[idx] > 0) continue
 
-            const baseIdx = orig === ' ' ? 0 : Math.max(0, shimmerChars.indexOf(orig))
-            const shift = Math.round(effect * (shimmerChars.length - 1) * 0.5)
-            const newIdx = Math.max(0, Math.min(shimmerChars.length - 1, baseIdx + shift))
-            displayGrid[r][c] = shimmerChars[newIdx]
+            const orig = ORIGINAL_GRID[r][c]
+            const baseIdx = orig === ' ' ? 0 : Math.max(0, SHIMMER_CHARS.indexOf(orig))
+            const shift = Math.round(effect * (SHIMMER_CHARS.length - 1) * 0.5)
+            const newIdx = Math.max(0, Math.min(SHIMMER_CHARS.length - 1, baseIdx + shift))
+            displayGrid[r][c] = SHIMMER_CHARS[newIdx]
           }
         }
       }
 
-      // Apply sparkles on top
-      for (let r = 0; r < numRows; r++) {
-        for (let c = 0; c < numCols; c++) {
-          const idx = r * numCols + c
-          if (sparkleOffsets[idx] > 0) {
-            const orig = originalGrid[r][c]
-            displayGrid[r][c] = sparkleOffsets[idx] > 2 ? 'O' : (orig === ' ' ? '.' : orig.toUpperCase())
-          }
-        }
-      }
-
-      pre.textContent = displayGrid.map(r => r.join('')).join('\n')
+      flushDirty()
       animFrameId = requestAnimationFrame(runRippleLoop)
     }
 
+    function addRipple(x: number, y: number, opts: Partial<Ripple> = {}) {
+      ripples.push({
+        x, y,
+        radius: 0,
+        strength: opts.strength ?? 0.6,
+        speed:    opts.speed    ?? 0.8,
+        decay:    opts.decay    ?? 0.94,
+        wavelength: opts.wavelength ?? 4,
+      })
+    }
+
+    // --- Event handlers ---
     const handleMouseMove = (e: MouseEvent) => {
-      const rect = pre.getBoundingClientRect()
-      if (!rect.width || !rect.height) return
-      const col = Math.floor(((e.clientX - rect.left) / rect.width) * numCols)
-      const row = Math.floor(((e.clientY - rect.top) / rect.height) * numRows)
-      if (col >= 0 && col < numCols && row >= 0 && row < numRows) {
+      const rect = canvas.getBoundingClientRect()
+      const scaleX = canvas.width  / rect.width
+      const scaleY = canvas.height / rect.height
+      const px = (e.clientX - rect.left) * scaleX
+      const py = (e.clientY - rect.top)  * scaleY
+      const col = Math.floor(px / cellW)
+      const row = Math.floor(py / cellH)
+      if (col >= 0 && col < NUM_COLS && row >= 0 && row < NUM_ROWS) {
         addRipple(col, row, { strength: 0.5, speed: 0.7, decay: 0.96, wavelength: 3 })
         if (!isRunningLoop) runRippleLoop()
       }
     }
 
-    const handleClick = (e: MouseEvent) => {
-      const rect = pre.getBoundingClientRect()
-      if (!rect.width || !rect.height) return
-      const col = Math.floor(((e.clientX - rect.left) / rect.width) * numCols)
-      const row = Math.floor(((e.clientY - rect.top) / rect.height) * numRows)
-      if (col >= 0 && col < numCols && row >= 0 && row < numRows) {
-        addRipple(col, row, { strength: 1.0, speed: 1.2, decay: 0.90, wavelength: 6 })
-        if (!isRunningLoop) runRippleLoop()
-      }
-    }
-
-    let lastMove = 0
     const throttledMouseMove = (e: MouseEvent) => {
       const now = Date.now()
       if (now - lastMove > 50) { lastMove = now; handleMouseMove(e) }
     }
 
-    window.addEventListener('mousemove', throttledMouseMove)
-    window.addEventListener('click', handleClick)
-
-    const shimmerInterval = setInterval(() => {
-      for (let i = 0; i < sparkleOffsets.length; i++) {
-        if (sparkleOffsets[i] > 0) sparkleOffsets[i] -= 1
+    const handleClick = (e: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect()
+      const scaleX = canvas.width  / rect.width
+      const scaleY = canvas.height / rect.height
+      const px = (e.clientX - rect.left) * scaleX
+      const py = (e.clientY - rect.top)  * scaleY
+      const col = Math.floor(px / cellW)
+      const row = Math.floor(py / cellH)
+      if (col >= 0 && col < NUM_COLS && row >= 0 && row < NUM_ROWS) {
+        addRipple(col, row, { strength: 1.0, speed: 1.2, decay: 0.90, wavelength: 6 })
+        if (!isRunningLoop) runRippleLoop()
       }
+    }
+
+    const handleResize = () => {
+      computeSize()
+      buildAndFlush()
+    }
+
+    // --- Shimmer / sparkle intervals ---
+    const shimmerInterval = setInterval(() => {
+      for (let i = 0; i < sparkleOffsets.length; i++)
+        if (sparkleOffsets[i] > 0) sparkleOffsets[i]--
+
       const numSparkles = Math.floor(Math.random() * 2) + 1
       for (let i = 0; i < numSparkles; i++) {
-        const r = Math.floor(Math.random() * numRows)
-        const c = Math.floor(Math.random() * numCols)
-        const idx = r * numCols + c
-        const origChar = originalGrid[r]?.[c] ?? ' '
-        if (origChar === ' ') {
-          if (Math.random() < 0.12) sparkleOffsets[idx] = Math.floor(Math.random() * 3) + 2
-        } else {
-          sparkleOffsets[idx] = Math.floor(Math.random() * 4) + 3
-        }
+        const r = Math.floor(Math.random() * NUM_ROWS)
+        const c = Math.floor(Math.random() * NUM_COLS)
+        const idx = r * NUM_COLS + c
+        const orig = ORIGINAL_GRID[r][c]
+        sparkleOffsets[idx] = orig === ' '
+          ? (Math.random() < 0.12 ? Math.floor(Math.random() * 3) + 2 : 0)
+          : Math.floor(Math.random() * 4) + 3
       }
+
       const numChanges = Math.floor(Math.random() * 6) + 2
       for (let i = 0; i < numChanges; i++) {
-        const r = Math.floor(Math.random() * numRows)
-        const c = Math.floor(Math.random() * numCols)
-        const origChar = originalGrid[r]?.[c] ?? ' '
-        if (origChar === ' ') continue
-        const idx = r * numCols + c
-        shimmerOffsets[idx] = Math.floor(Math.random() * 3) - 1
+        const r = Math.floor(Math.random() * NUM_ROWS)
+        const c = Math.floor(Math.random() * NUM_COLS)
+        if (ORIGINAL_GRID[r][c] === ' ') continue
+        shimmerOffsets[r * NUM_COLS + c] = (Math.floor(Math.random() * 3) - 1) as -1 | 0 | 1
       }
-      if (!isRunningLoop) renderStaticWithShimmer()
+
+      if (!isRunningLoop) buildAndFlush()
     }, 70)
 
     const resetInterval = setInterval(() => {
       shimmerOffsets.fill(0)
       sparkleOffsets.fill(0)
-      if (!isRunningLoop) pre.textContent = ASCII_ART
+      if (!isRunningLoop) buildAndFlush()
     }, 5000)
 
-    renderStaticWithShimmer()
+    // --- Init ---
+    computeSize()
+    document.fonts.ready.then(() => {
+      computeSize()
+      buildAndFlush()
+    })
+    buildAndFlush()
+
+    window.addEventListener('mousemove', throttledMouseMove)
+    window.addEventListener('click', handleClick)
+    window.addEventListener('resize', handleResize)
 
     return () => {
       window.removeEventListener('mousemove', throttledMouseMove)
       window.removeEventListener('click', handleClick)
+      window.removeEventListener('resize', handleResize)
       clearInterval(shimmerInterval)
       clearInterval(resetInterval)
       cancelAnimationFrame(animFrameId)
@@ -254,8 +360,11 @@ export default function AsciiBackground() {
   }, [])
 
   return (
-    <div id="ascii-bg">
-      <pre ref={preRef} id="ascii-figure" />
+    <div id="ascii-bg" className="fixed inset-0 z-0 pointer-events-none overflow-hidden flex items-center justify-center">
+      <canvas
+        ref={canvasRef}
+        style={{ imageRendering: 'pixelated', pointerEvents: 'auto' }}
+      />
     </div>
   )
 }

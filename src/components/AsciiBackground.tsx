@@ -339,9 +339,6 @@ export default function AsciiBackground() {
     window.addEventListener('touchmove', handleTouch, { passive: true })
     window.addEventListener('touchstart', handleTouchTap, { passive: true })
 
-    window.removeEventListener('touchmove', handleTouch)
-    window.removeEventListener('touchstart', handleTouchTap)
-
     const handleResize = () => {
       computeSize()
       buildAndFlush()
@@ -396,6 +393,8 @@ export default function AsciiBackground() {
       window.removeEventListener('mousemove', throttledMouseMove)
       window.removeEventListener('click', handleClick)
       window.removeEventListener('resize', handleResize)
+      window.removeEventListener('touchmove', handleTouch)
+      window.removeEventListener('touchstart', handleTouchTap)
       clearInterval(shimmerInterval)
       clearInterval(resetInterval)
       cancelAnimationFrame(animFrameId)

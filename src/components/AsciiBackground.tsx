@@ -85,6 +85,10 @@ export default function AsciiBackground() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+    // Capture as non-null for use inside nested functions
+    const context = ctx
+    const cvs = canvas
+
     // --- State ---
     let cellW = 0
     let cellH = 0
@@ -104,8 +108,8 @@ export default function AsciiBackground() {
     // --- Sizing ---
     function computeSize() {
       const testSize = 16
-      ctx.font = `${testSize}px 'Share Tech Mono', monospace`
-      const metrics = ctx.measureText('M')
+      context.font = `${testSize}px 'Share Tech Mono', monospace`
+      const metrics = context.measureText('M')
       const charW = metrics.width
       // Use actual measured height: ascent + descent
       const charH = testSize * 1.2
@@ -116,8 +120,8 @@ export default function AsciiBackground() {
       cellW = fontSize * (charW / testSize)
       cellH = fontSize * 1.2
 
-      canvas.width  = Math.ceil(NUM_COLS * cellW)
-      canvas.height = Math.ceil(NUM_ROWS * cellH)
+      cvs.width  = Math.ceil(NUM_COLS * cellW)
+      cvs.height = Math.ceil(NUM_ROWS * cellH)
 
       // After resize, force full redraw
       for (let r = 0; r < NUM_ROWS; r++)
@@ -127,8 +131,8 @@ export default function AsciiBackground() {
 
     // --- Draw only changed cells ---
     function flushDirty() {
-      ctx.font = `${fontSize}px 'Share Tech Mono', monospace`
-      ctx.textBaseline = 'top'
+      context.font = `${fontSize}px 'Share Tech Mono', monospace`
+      context.textBaseline = 'top'
 
       for (let r = 0; r < NUM_ROWS; r++) {
         for (let c = 0; c < NUM_COLS; c++) {
@@ -140,17 +144,17 @@ export default function AsciiBackground() {
           const y = r * cellH
 
           // Erase old cell
-          ctx.clearRect(x, y, cellW + 1, cellH + 1)
+          context.clearRect(x, y, cellW + 1, cellH + 1)
 
           if (ch === ' ') continue
 
           // Moonlight glow layers
-          ctx.fillStyle = 'rgba(150,190,255,0.15)'
-          ctx.fillText(ch, x, y)
-          ctx.fillStyle = 'rgba(180,210,255,0.35)'
-          ctx.fillText(ch, x, y)
-          ctx.fillStyle = 'rgba(232,240,255,0.70)'
-          ctx.fillText(ch, x, y)
+          context.fillStyle = 'rgba(150,190,255,0.15)'
+          context.fillText(ch, x, y)
+          context.fillStyle = 'rgba(180,210,255,0.35)'
+          context.fillText(ch, x, y)
+          context.fillStyle = 'rgba(232,240,255,0.70)'
+          context.fillText(ch, x, y)
         }
       }
     }
@@ -267,9 +271,9 @@ export default function AsciiBackground() {
 
     // --- Event handlers ---
     const handleMouseMove = (e: MouseEvent) => {
-      const rect = canvas.getBoundingClientRect()
-      const scaleX = canvas.width  / rect.width
-      const scaleY = canvas.height / rect.height
+      const rect = cvs.getBoundingClientRect()
+      const scaleX = cvs.width  / rect.width
+      const scaleY = cvs.height / rect.height
       const px = (e.clientX - rect.left) * scaleX
       const py = (e.clientY - rect.top)  * scaleY
       const col = Math.floor(px / cellW)
@@ -286,9 +290,9 @@ export default function AsciiBackground() {
     }
 
     const handleClick = (e: MouseEvent) => {
-      const rect = canvas.getBoundingClientRect()
-      const scaleX = canvas.width  / rect.width
-      const scaleY = canvas.height / rect.height
+      const rect = cvs.getBoundingClientRect()
+      const scaleX = cvs.width  / rect.width
+      const scaleY = cvs.height / rect.height
       const px = (e.clientX - rect.left) * scaleX
       const py = (e.clientY - rect.top)  * scaleY
       const col = Math.floor(px / cellW)

@@ -95,7 +95,7 @@ export default function Home() {
       {/* SOUNDTRACK PLAYER */}
       <SoundtrackPlayer />
 
-      {/* NAVBAR */}
+      {/* NAV */}
       <Navbar />
 
       {/* HERO */}

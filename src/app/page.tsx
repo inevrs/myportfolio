@@ -95,9 +95,6 @@ export default function Home() {
       {/* SOUNDTRACK PLAYER */}
       <SoundtrackPlayer />
 
-      {/* NAV */}
-      <Navbar />
-
       {/* HERO */}
       <section id="hero">
         <div className="hero-inner">
@@ -132,7 +129,7 @@ export default function Home() {
         <h2 className="section-title">about_me</h2>
         <div className="divider"></div>
         <div className="about-grid">
-          <div className="about-text">
+          <div className="about-text contact-card">
             <p>
               Hi — I&apos;m <span>Isyraf</span>. I was born in 2006, My interest in technology started at around 15, when I was using my father&apos;s laptop and allegedly accidentally installed a virus while trying to download free games and web exploits.
             </p>
@@ -143,12 +140,12 @@ export default function Home() {
               &gt; currently available for work / collaborations
             </p>
           </div>
-          <div className="about-stats">
-            <div className="stat-item">
+          <div className="about-stats contact-card">
+            <div className="stat-item contact-card">
               <div className="stat-num chrome-text">00+</div>
               <div className="stat-label">projects completed</div>
             </div>
-            <div className="stat-item">
+            <div className="stat-item contact-card">
               <div className="stat-num chrome-text">hobbies</div>
               <div className="stat-label" style={{ textTransform: 'lowercase' }}>archery · hiking · web design</div>
             </div>

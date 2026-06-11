@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import AsciiBackground from '@/components/AsciiBackground'
 import SoundtrackPlayer from '@/components/SoundtrackPlayer'
+import Navbar from '@/components/Navbar'
 
 interface Skill {
   name: string
@@ -93,20 +94,6 @@ export default function Home() {
 
       {/* SOUNDTRACK PLAYER */}
       <SoundtrackPlayer />
-
-      {/* NAV */}
-      <nav>
-        <div className="nav-logo">
-          Welcome to isyraf's personal webpage <span style={{ color: '#333' }}>{'><'}</span>
-        </div>
-        <ul className="nav-links">
-          {['about', 'skills', 'projects', 'contact'].map(id => (
-            <li key={id}>
-              <a href={`#${id}`} style={getNavLinkStyle(id)}>{id}</a>
-            </li>
-          ))}
-        </ul>
-      </nav>
 
       {/* HERO */}
       <section id="hero">

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import AsciiBackground from '@/components/AsciiBackground'
 import SoundtrackPlayer from '@/components/SoundtrackPlayer'
 import Navbar from '@/components/Navbar'
+import CopyButton from '@/components/CopyButton'
 
 interface Skill {
   name: string
@@ -210,25 +211,37 @@ export default function Home() {
             <div className="contact-card">
               <div className="contact-row">
                 <span className="contact-key">email</span>
-                <a href="mailto:isyrafnasruddin9@email.com" className="contact-val">
-                  isyrafnasruddin9@email.com
-                </a>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <a href="mailto:isyrafnasruddin9@email.com" className="contact-val">
+                    isyrafnasruddin9@email.com
+                  </a>
+                  <CopyButton text="isyrafnasruddin9@email.com" />
+                </div>
               </div>
               <div className="contact-row">
                 <span className="contact-key">github</span>
-                <a href="https://github.com/inevrs" target="_blank" rel="noopener noreferrer" className="contact-val">
-                  github.com/inevrs
-                </a>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <a href="https://github.com/inevrs" target="_blank" rel="noopener noreferrer" className="contact-val">
+                    github.com/inevrs
+                  </a>
+                  <CopyButton text="https://github.com/inevrs" />
+                </div>
               </div>
               <div className="contact-row">
                 <span className="contact-key">discord</span>
-                <a href="#" className="contact-val">@invertedivine</a>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <a href="#" className="contact-val">@invertedivine</a>
+                  <CopyButton text="@invertedivine" />
+                </div>
               </div>
               <div className="contact-row">
                 <span className="contact-key">instagram</span>
-                <a href="https://instagram.com/isyrvns" target="_blank" rel="noopener noreferrer" className="contact-val">
-                  @isyvrns
-                </a>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <a href="https://instagram.com/isyvrns" target="_blank" rel="noopener noreferrer" className="contact-val">
+                    @isyvrns
+                  </a>
+                  <CopyButton text="https://instagram.com/isyvrns" />
+                </div>
               </div>
             </div>
           </div>

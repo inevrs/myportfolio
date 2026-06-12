@@ -580,6 +580,29 @@ footer {
   gap: 0.75rem;
 }
 
+/* COPY BUTTON */
+.copy-btn {
+  background: none;
+  border: 1px solid rgba(140, 158, 181, 0.2);
+  border-radius: 4px;
+  color: var(--dim);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  padding: 0.15rem 0.4rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+}
+.copy-btn:hover {
+  border-color: rgba(140, 158, 181, 0.5);
+  color: var(--white);
+  background: rgba(140, 158, 181, 0.1);
+}
+.copy-btn.copied {
+  color: #3fb950;
+  border-color: rgba(63, 185, 80, 0.4);
+}
+
 @media (max-width: 640px) {
   .nav-links { display: none !important; }
   .nav-hamburger { display: flex; }

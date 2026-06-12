@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import AsciiBackground from '@/components/AsciiBackground'
 import SoundtrackPlayer from '@/components/SoundtrackPlayer'
 import Navbar from '@/components/Navbar'
-import CopyButton from '@/components/CopyButton'
+import CopyButton from '../components/CopyButton'
 
 interface Skill {
   name: string

@@ -22,7 +22,7 @@ export default function SoundtrackPlayer() {
   return (
     <div className="soundtrack-player" style={{ zIndex: 9999 }}>
       {/* We use /myportfolio/ prefix because of your next.config.ts basePath */}
-      <audio ref={audioRef} src="/myportfolio/lofi-soundtrack.mp3" loop />
+      <audio ref={audioRef} src="/myportfolio/lofi_soundtrack.mp3" loop />
       
       <button className="play-btn" onClick={togglePlay}>
         {isPlaying ? '❚❚' : '▶'}

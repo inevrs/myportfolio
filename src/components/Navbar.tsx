@@ -52,7 +52,7 @@ export default function Navbar() {
           ))}
           <li>
             <a
-              href="/myportfolio/resume.pdf"
+              href="/myportfolio/resume_isyraf_nasruddin.pdf"
               download
               className="resume-btn"
             >

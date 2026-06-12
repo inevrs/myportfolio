@@ -23,7 +23,9 @@ export default function SoundtrackPlayer() {
 
   return (
     <div className="soundtrack-player" style={{ zIndex: 9999 }}>
-      <audio ref={audioRef} src="/myportfolio/lofi-soundtrack.mp3" preload="none" loop />
+      <audio ref={audioRef} preload="auto" loop>
+        <source src="/myportfolio/lofi-soundtrack.mp3" type="audio/mpeg" />
+      </audio>
       <button className="play-btn" onClick={togglePlay}>
         {isPlaying ? '❚❚' : '▶'}
       </button>

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import ThemeToggle from './ThemeToggle'
 
 const NAV_ITEMS = ['about', 'skills', 'projects', 'contact']
 
@@ -49,18 +50,33 @@ export default function Navbar() {
               <a href={`#${id}`} style={getLinkStyle(id)}>{id}</a>
             </li>
           ))}
+          <li>
+            <a
+              href="/Resume - MUHAMMAD ISYRAF NASRUDDIN.pdf"
+              download
+              className="resume-btn"
+            >
+              Resume ↓
+            </a>
+          </li>
+          <li>
+            <ThemeToggle />
+          </li>
         </ul>
 
         {/* Hamburger button — mobile only */}
-        <button
-          className="nav-hamburger"
-          onClick={() => setMenuOpen(prev => !prev)}
-          aria-label="Toggle menu"
-        >
-          <span className={`ham-line ${menuOpen ? 'open-1' : ''}`} />
-          <span className={`ham-line ${menuOpen ? 'open-2' : ''}`} />
-          <span className={`ham-line ${menuOpen ? 'open-3' : ''}`} />
-        </button>
+        <div className="nav-right-mobile">
+          <ThemeToggle />
+          <button
+            className="nav-hamburger"
+            onClick={() => setMenuOpen(prev => !prev)}
+            aria-label="Toggle menu"
+          >
+            <span className={`ham-line ${menuOpen ? 'open-1' : ''}`} />
+            <span className={`ham-line ${menuOpen ? 'open-2' : ''}`} />
+            <span className={`ham-line ${menuOpen ? 'open-3' : ''}`} />
+          </button>
+        </div>
       </nav>
 
       {/* Mobile dropdown */}
@@ -77,6 +93,14 @@ export default function Navbar() {
               {id}
             </a>
           ))}
+          <a
+            href="/Resume - MUHAMMAD ISYRAF NASRUDDIN.pdf"
+            download
+            className="resume-btn"
+            onClick={() => setMenuOpen(false)}
+          >
+            Resume ↓
+          </a>
         </div>
       )}
     </>

@@ -21,7 +21,6 @@ const SKILLS_DATA: Skill[] = [
   { name: 'HTML / PHP / CSS' },
   { name: 'JavaScript' },
   { name: 'Python' },
-  { name: 'Git / GitHub' },
   { name: 'MySQL' },
 ]
 

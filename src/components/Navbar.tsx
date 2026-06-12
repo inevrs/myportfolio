@@ -94,7 +94,7 @@ export default function Navbar() {
             </a>
           ))}
           <a
-            href="/myportfolio/resume.pdf"
+            href="/myportfolio/resume_isyraf_nasruddin.pdf"
             download
             className="resume-btn"
             onClick={() => setMenuOpen(false)}

@@ -226,7 +226,7 @@ export default function Home() {
               </div>
               <div className="contact-row">
                 <span className="contact-key">instagram</span>
-                <a href="https://instagram.com/isyvrns" target="_blank" rel="noopener noreferrer" className="contact-val">
+                <a href="https://instagram.com/isyrvns" target="_blank" rel="noopener noreferrer" className="contact-val">
                   @isyvrns
                 </a>
               </div>

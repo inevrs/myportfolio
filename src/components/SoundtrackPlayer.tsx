@@ -16,7 +16,7 @@ export default function SoundtrackPlayer() {
         .then(() => setIsPlaying(true))
         .catch(err => {
           console.log('Audio play blocked:', err)
-          setIsPlaying(false)
+          setIsPlaying(true)
         })
     }
   }

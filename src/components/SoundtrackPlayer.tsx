@@ -1,11 +1,8 @@
 'use client'
-
 import { useState, useRef } from 'react'
-
 export default function SoundtrackPlayer() {
   const [isPlaying, setIsPlaying] = useState(false)
   const audioRef = useRef<HTMLAudioElement | null>(null)
-
   const togglePlay = () => {
     if (!audioRef.current) return
     if (isPlaying) {
@@ -16,15 +13,14 @@ export default function SoundtrackPlayer() {
         .then(() => setIsPlaying(true))
         .catch(err => {
           console.log('Audio play blocked:', err)
-          setIsPlaying(true)
+          setIsPlaying(false)
         })
     }
   }
-
   return (
     <div className="soundtrack-player" style={{ zIndex: 9999 }}>
       <audio ref={audioRef} preload="auto" loop>
-        <source src="/myportfolio/lofi-soundtrack.mp3" type="audio/mpeg" />
+        <source src="/myportfolio/lofi-soundtrack.mp3?v=2" type="audio/mpeg" />
       </audio>
       <button className="play-btn" onClick={togglePlay}>
         {isPlaying ? '❚❚' : '▶'}

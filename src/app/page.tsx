@@ -27,10 +27,10 @@ const SKILLS_DATA: Skill[] = [
 
 const PROJECTS_DATA: Project[] = [
   {
-    name: 'project_01',
-    desc: 'Desc.',
-    tags: ['tag1', 'tag2'],
-    link: '#',
+    name: 'Eventix - Event Management System (Alpha & Testing)',
+    desc: 'A web-based venue booking system inspired by Airbnb, built for CSC264 + ISP250 group project at UiTM.',
+    tags: ['HTML', 'CSS', 'JavaScript', 'PHP', 'MySQL'],
+    link: 'https://github.com/inevrs/Eventix-Venue.Alpha',
   },
   {
     name: 'project_02',

@@ -23,14 +23,14 @@ export default function SoundtrackPlayer() {
 
   return (
     <div className="soundtrack-player" style={{ zIndex: 9999 }}>
-      <audio ref={audioRef} src="https://stream.zeno.fm/0r0xa792kwzuv" preload="none" />
+      <audio ref={audioRef} src="/Lofi - Soundtrack.mp3" preload="none" loop />
       <button className="play-btn" onClick={togglePlay}>
         {isPlaying ? '❚❚' : '▶'}
       </button>
       <div className="track-info">
         <span className="track-status">{isPlaying ? 'NOW PLAYING' : 'SOUNDTRACK'}</span>
         <span className={`track-title ${isPlaying ? 'scroll-text' : ''}`}>
-          lofi beats · study / relax radio
+          Lofi · Soundtrack
         </span>
       </div>
       {isPlaying && (

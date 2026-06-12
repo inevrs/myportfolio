@@ -16,14 +16,14 @@ export default function SoundtrackPlayer() {
         .then(() => setIsPlaying(true))
         .catch(err => {
           console.log('Audio play blocked:', err)
-          setIsPlaying(true)
+          setIsPlaying(false)
         })
     }
   }
 
   return (
     <div className="soundtrack-player" style={{ zIndex: 9999 }}>
-      <audio ref={audioRef} src="/Lofi - Soundtrack.mp3" preload="none" loop />
+      <audio ref={audioRef} src="/lofi-soundtrack.mp3" preload="none" loop />
       <button className="play-btn" onClick={togglePlay}>
         {isPlaying ? '❚❚' : '▶'}
       </button>

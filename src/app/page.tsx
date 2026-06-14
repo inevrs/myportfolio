@@ -32,13 +32,13 @@ const PROJECTS_DATA: Project[] = [
     link: 'https://github.com/inevrs/Eventix-Venue.Alpha',
   },
   {
-    name: 'project_02',
+    name: 'Upcoming projects',
     desc: 'Desc.',
     tags: ['tag1', 'tag2'],
     link: '#',
   },
   {
-    name: 'project_03',
+    name: 'Upcoming projects',
     desc: 'Desc.',
     tags: ['tag1', 'tag2'],
     link: '#',
@@ -134,10 +134,10 @@ export default function Home() {
         <div className="about-grid contact-card">
           <div className="about-text">
             <p>
-              Hi — I&apos;m <span>Isyraf</span>. I was born in 2006, My interest in technology started at around 15, when I was using my father&apos;s laptop and allegedly accidentally installed a virus while trying to download free games and web exploits.
+              Hi — I&apos;m <span>Isyraf</span>. My journey into technology started at 15 when I allegedly accidentally infected my father's laptop with malware while hunting for free games online.
             </p>
             <p>
-              Seeing the computer execute exactly what that malware dictated was a revelation. It taught me a profound lesson: you are in complete control of the systems you build (most of the time lol). Ever since that incident, I&apos;ve been driven to learn coding.
+              While my father was teaching me on fixing the infected laptop, I was more interested in understanding what had happened and why. That curiosity became the starting point for everything that followed.
             </p>
             <p style={{ color: '#444', fontSize: '0.7rem' }}>
               &gt; currently available for work / collaborations
@@ -145,7 +145,7 @@ export default function Home() {
           </div>
           <div className="about-stats">
             <div className="stat-item">
-              <div className="stat-num chrome-text">00+</div>
+              <div className="stat-num chrome-text">01+</div>
               <div className="stat-label">projects completed</div>
             </div>
             <div className="stat-item">

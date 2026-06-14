@@ -137,7 +137,7 @@ export default function Home() {
               Hi — I&apos;m <span>Isyraf</span>. My journey into technology started at 15 when I allegedly accidentally infected my father's laptop with malware while hunting for free games online.
             </p>
             <p>
-              While my father was teaching me on fixing the infected laptop, I was more interested in understanding what had happened and why. That curiosity became the starting point for everything that followed.
+              While my father was teaching me how to fix the infected laptop, I was more interested in understanding what had happened and why. That curiosity became the starting point for everything that followed.
             </p>
             <p style={{ color: '#444', fontSize: '0.7rem' }}>
               &gt; currently available for work / collaborations

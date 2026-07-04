@@ -32,7 +32,7 @@ const PROJECTS_DATA: Project[] = [
     link: 'https://github.com/inevrs/Eventix-Venue.Alpha',
   },
   {
-    name: 'OptiFitness',
+    name: 'OptiFitness - Modern fitness tracking app',
     desc: 'A modern fitness tracking web app built with React + Vite (frontend) and Node.js + Express + MySQL (backend).',
     tags: ['JavaScript', 'HTML', 'MySQL', 'MIT App inventor'],
     link: 'https://github.com/inevrs/OptiFitness',
